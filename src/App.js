@@ -5,11 +5,13 @@ import Footer from './components/Footer'
 import { Routes,Route } from 'react-router-dom'
 import Signup from './components/Signup';
 import Signin from './components/Signin';
+import Product_card from './components/Product_card';
 
 function App() {
   return (
     <div>
       <Header/>
+      {/* <Product_card/> */}
       
       <Routes>
         <Route path='/' element={<Banner/>}  />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './Signup.css'
 import { getUsers, registerAPI } from '../services/allAPI';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
   
@@ -8,30 +9,68 @@ function Signup() {
 
 
 
-    
+    const navigate = useNavigate()
     const [userData, setUserData] = useState({
-      username: "",
+      name: "",
       email: "",
-      mobile:"",
-      password: ""
+      // mobile:"",
+      password: "",
+      confPassord : ""
   })
+
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [error, setError] = useState('');
+
+  const handlePasswordChange = (e) => {
+    setUserData({ ...userData, password: e.target.value });
+    if (passwordConfirm) {
+      validatePassword(e.target.value, passwordConfirm);
+    }
+  };
+
+  const handlePasswordConfirmChange = (e) => {
+    setPasswordConfirm(e.target.value);
+    validatePassword(userData.password, e.target.value);
+  };
+
+  const validatePassword = (password, passwordConfirm) => {
+    if (password && passwordConfirm && password !== passwordConfirm) {
+      setError('Passwords do not match');
+    } else {
+      setError('');
+    }
+  };
+
   console.log(userData);
   
-  const handleRegister = async (e) =>{
-    e.preventDefault()
+  const handleRegister = async (e) => {
+    e.preventDefault();
 
-    const {username, email, mobile, password} = userData
+    const { name, email, password } = userData;
 
-    if(!username || !email || !mobile || !password){
-      alert('Please Enter Details')
-    }
-    else{
-      const result = await registerAPI(userData)
-      console.log(result.data);
+    // if (!name || !email || !password) {
+    //     alert('Please Enter Details');
+    // } else {
+        const result = await registerAPI(userData);
+        console.log(result.data);
 
+        if (result.status === 200) {  // Corrected 'satus' to 'status'
+            alert(`${result.data.username} is successfully registered`);
 
-    }
-  }
+            setUserData({
+              username:"",
+                name: "",
+                email: "",
+                password: "",
+                passwordConfirm:""
+            });
+            navigate('/signin')
+        } else {
+            alert(`${result.response.data} failed registration`);
+        }
+    // }
+};
+
 
   const getAllUsers = async()=>{
     const response = await getUsers()
@@ -39,20 +78,6 @@ function Signup() {
   }
    
 
-//   const fetchData = async () => {
-//     try {
-//         const result = await get('http://127.0.0.1:8000/api/users/register/'); // Replace with your actual endpoint
-//         setData(result);
-//         alert('try')
-//         console.log('try');
-//     } catch (error) {
-//         setError(error);
-//         console.log('catch');
-//         alert('catch')
-//     } finally {
-//         setLoading(false);
-//     }
-// };
 
   
 
@@ -91,7 +116,7 @@ function Signup() {
           />
         </div>
 
-        <div className="form-group">
+        {/* <div className="form-group">
           <label htmlFor="mobile">Mobile number</label>
           <input
           onChange={(e) => setUserData({ ...userData, mobile: e.target.value })} value={userData.mobile}
@@ -102,31 +127,34 @@ function Signup() {
             
             required
           />
-        </div>
+        </div> */}
 
         <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-          onChange={(e) => setUserData({ ...userData, password: e.target.value })} value={userData.password}
-            type="password"
-            placeholder='Password'
-            id="password"
-            name="password"
-            
-            required
-          />
-        </div>
-        {/* <div className="form-group">
-          <label htmlFor="passwordConfirm">Re-enter password</label>
-          <input
-            type="password"
-            placeholder='Re-enter Password'
-            id="passwordConfirm"
-            name="passwordConfirm"
-            
-            required
-          />
-        </div> */}
+        <label htmlFor="password">Password</label>
+        <input
+          onChange={handlePasswordChange}
+          value={userData.password}
+          type="password"
+          placeholder="Password"
+          id="password"
+          name="password"
+          required
+        />
+      </div>
+      <div className="form-group">
+        <label htmlFor="passwordConfirm">Re-enter password</label>
+        <input
+          onChange={handlePasswordConfirmChange}
+          value={passwordConfirm}
+          type="password"
+          placeholder="Re-enter Password"
+          id="passwordConfirm"
+          name="passwordConfirm"
+          required
+        />
+      </div>
+      {error && <span style={{ color: 'red' }}>{error}</span>}
+
         <button type="submit" onClick={handleRegister} className="signup-button">Create account</button>
 
         <div className='redirect'>

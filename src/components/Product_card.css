@@ -1,0 +1,55 @@
+.scroll-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  
+    
+    scroll-behavior: smooth;
+    flex-grow: 1;
+    /* height: 100vh; */
+  }
+  .scroll-card {
+    flex: 0 0 auto;
+    width: 220px;
+    margin-right: 20px;
+    scroll-snap-align: start;
+    /* border: 1px solid #ccc; */
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  .card-image {
+    width: 100%;
+    margin-left: 7px;
+    height: auto;
+  }
+  
+.card-title {
+    text-align: center;
+    margin: 0;
+    width: 100%;
+    font-size: 13px;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  @media only screen and (max-width: 600px) {
+    .scroll-card {
+        flex: 0 0 auto;
+        width: 180px;
+        margin-right: 20px;
+        scroll-snap-align: start;
+        /* border: 1px solid #ccc; */
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      .card-image {
+        width: 100%;
+        margin-left: 7px;
+        height: auto;
+      }
+  }
